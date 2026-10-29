@@ -121,7 +121,7 @@ function showFront(){ const device=$('#device'); if(device) device.style.transfo
 function lockPhone(){closePanels();locked=true;const home=$('#homeView'); const lock=$('#lockView'); if(home) home.style.display='none'; if(lock) lock.style.display='flex'; const island=$('#island'); if(island) island.classList.remove('open');showFront();toast('Téléphone verrouillé')}
 function unlockPhone(){if(state.passcode){const entered=prompt('Code de déverrouillage :');if(entered!==state.passcode){toast('Code incorrect');return}}locked=false;const lock=$('#lockView'); const home=$('#homeView'); if(lock) lock.style.display='none'; if(home) home.style.display='block';toast('Déverrouillé')}
 function showCC(){if(locked)unlockPhone();closePanels();const cc=$('#ccView'); if(cc) cc.style.display='block';syncToggles()}
-function openApp(id){
+function launchApp(id){
  if(!state.installed.includes(id)){toast('Cette application n’est pas installée');return}
  if(locked)unlockPhone();if(locked)return;
  closePanels();currentApp=id;const title=$('#appTitle'); const body=$('#appBody'); const appWindow=$('#appWindow'); if(title) title.textContent=apps[id]?.name||'Application'; if(body) body.innerHTML=appMarkup(id); if(appWindow) appWindow.style.display='block';bindApp(id);showFront();
@@ -208,9 +208,7 @@ function initSnake(){stopSnake();const c=$('#snakeCanvas');if(!c)return;snake=[{
 function drawSnake(){const c=$('#snakeCanvas');if(!c)return;const ctx=c.getContext('2d'),cell=17.5;ctx.fillStyle='#111827';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#f5b84e';ctx.fillRect(food.x*cell,food.y*cell,cell-1,cell-1);ctx.fillStyle='#4bd58b';snake.forEach((p,i)=>ctx.fillRect(p.x*cell,p.y*cell,cell-2,cell-2))}
 function snakeStep(){const h={...snake[0]};if(snakeDir==='up')h.y--;if(snakeDir==='down')h.y++;if(snakeDir==='left')h.x--;if(snakeDir==='right')h.x++;if(h.x<0||h.y<0||h.x>=16||h.y>=16||snake.some(p=>p.x===h.x&&p.y===h.y)){stopSnake();toast('Partie terminée');return}snake.unshift(h);if(h.x===food.x&&h.y===food.y){food={x:Math.floor(Math.random()*16),y:Math.floor(Math.random()*16)}}else snake.pop();drawSnake()}
 function bindSnakeControls(){ $$('[data-snake]').forEach(b=>b.onclick=()=>{snakeDir=b.dataset.snake});const s=$('#snakeStart');if(s)s.onclick=()=>{initSnake();stopSnake();snakeTimer=setInterval(snakeStep,160)}}
-const oldBindApp=bindApp;
-const origOpenApp=openApp;
-function openApp(id){origOpenApp(id);if(id==='snake')bindSnakeControls();if(id==='game2048'){$('#gameLeft').onclick=()=>move2048('left');$('#gameRight').onclick=()=>move2048('right');$('#gameUp').onclick=()=>move2048('up');$('#gameDown').onclick=()=>move2048('down');$('#gameReset').onclick=init2048}}
+function openApp(id){launchApp(id);if(id==='snake')bindSnakeControls();if(id==='game2048'){$('#gameLeft').onclick=()=>move2048('left');$('#gameRight').onclick=()=>move2048('right');$('#gameUp').onclick=()=>move2048('up');$('#gameDown').onclick=()=>move2048('down');$('#gameReset').onclick=init2048}}
 document.addEventListener('keydown',e=>{if(currentApp==='game2048'&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();move2048(({ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'})[e.key])}if(currentApp==='snake'&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){snakeDir=({ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'})[e.key]}if(e.key==='Escape'){closePanels();if(locked)lockPhone();else { const home=$('#homeView'); if(home) home.style.display='block'; }}});
 onClick('#frontBtn',showFront);onClick('#lockBtn',lockPhone);onClick('#ccBtn',showCC);onClick('#closeCC',()=>{ const cc=$('#ccView'); if(cc) cc.style.display='none'; });
 onClick('#powerBtn',()=>{ const power=$('#powerView'); if(power) { power.style.display='flex';} closePanels(); const power2=$('#powerView'); if(power2) power2.style.display='flex';});
