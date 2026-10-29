@@ -83,6 +83,17 @@ h1 span{color:#a4b7d9}.copy{color:#c1c7d8;line-height:1.7;max-width:580px;font-s
 .status-control{font-size:0;width:18px;height:18px;position:absolute;right:0;top:-3px;opacity:.01}
 @media(max-width:850px){.device-stage{min-height:900px}}
 @media(max-width:430px){.device{width:402px;height:874px;transform:scale(.82)}.device.front{transform:scale(.82)}.device-stage{min-height:760px}.home{padding-top:82px}}
+.home-widgets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:17px}
+.home-widget{height:92px;border:1px solid rgba(255,255,255,.2);border-radius:19px;padding:11px 13px;background:rgba(245,248,255,.2);backdrop-filter:blur(24px) saturate(1.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.12);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.widget-heading{display:flex;align-items:center;justify-content:space-between;font-size:9px;font-weight:650;letter-spacing:.08em;color:rgba(255,255,255,.85)}
+.widget-weather{font-size:27px;font-weight:300;line-height:1}.widget-detail{font-size:10px;color:rgba(255,255,255,.8)}
+.widget-calendar{font-size:9px;font-weight:650;letter-spacing:.1em;color:#ff817f}.widget-day{font-size:27px;line-height:1;color:white;font-weight:400;letter-spacing:0}
+.home-indicator{width:118px;height:5px;border:0;padding:0;cursor:pointer}
+.app-icon svg{display:block;width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.icon-messages svg,.icon-health svg{fill:#fff;stroke:none}
+.icon-photos svg{width:34px;height:34px}
+.store-item>.app-icon{width:45px;height:45px;flex:none;border-radius:12px}
+@media(max-width:430px){.home-widgets{gap:8px;margin-bottom:14px}.home-widget{height:86px;padding:9px 10px}.widget-weather,.widget-day{font-size:24px}}
 </style>
 </head>
 <body>
@@ -100,7 +111,7 @@ h1 span{color:#a4b7d9}.copy{color:#c1c7d8;line-height:1.7;max-width:580px;font-s
         <div class="island" id="island"><div class="island-content"><div class="album">♫</div><div class="track"><b>Ambiance nocturne</b><span>Lecture simulée</span></div><span>Ⅱ</span></div></div>
         <div class="view lock" id="lockView"><div class="date" id="lockDate">Jeudi 29 octobre</div><div class="time" id="lockTime">20:07</div><div class="lock-widgets"><div class="widget"><small>CALENDRIER</small><strong>Rien prévu</strong></div><div class="widget"><small>MÉTÉO</small><strong>14° · Nuageux</strong></div></div><div class="lock-shortcuts"><button class="circlebtn" id="torchBtn">ϟ</button><button class="circlebtn" id="lockCamera">◎</button></div><div class="hint">Balayer vers le haut pour déverrouiller</div></div>
         <div class="view home" id="homeView">
-          <div class="greeting" id="homeDate">JEUDI 29 OCTOBRE</div><div class="grid" id="appGrid"></div>
+          <div class="greeting" id="homeDate">JEUDI 29 OCTOBRE</div><div class="home-widgets"><div class="home-widget"><div class="widget-heading"><span>TOURCOING</span><span>☀</span></div><div class="widget-weather">14°</div><div class="widget-detail">Nuageux</div></div><div class="home-widget"><div class="widget-calendar" id="homeMonth">OCTOBRE</div><div class="widget-day" id="homeDay">29</div><div class="widget-detail">Aucun événement</div></div></div><div class="grid" id="appGrid"></div>
           <div class="dock" id="dock"></div>
         </div>
         <div class="appwindow" id="appWindow"><div class="appbar"><button class="back" id="backBtn">‹ Accueil</button><h2 id="appTitle">Application</h2><button class="back" id="closeAppBtn">Fermer</button></div><div class="appbody" id="appBody"></div></div>
@@ -112,7 +123,7 @@ h1 span{color:#a4b7d9}.copy{color:#c1c7d8;line-height:1.7;max-width:580px;font-s
         <div class="ccgrid"><div class="cctile"><div class="ccicons"><button class="ccicon" data-cc="torch">ϟ</button><button class="ccicon" data-cc="rotation">↻</button></div><div class="cctitle">Raccourcis</div></div><div class="cctile"><div class="ccicons"><button class="ccicon" data-cc="screen">▣</button><button class="ccicon" data-cc="lowpower">◉</button></div><div class="cctitle">Options système</div></div></div>
         </div>
         <div class="power" id="powerView"><div style="letter-spacing:.2em;color:#aaa;font-size:11px">IPHONE</div><button id="powerOff">Éteindre (simulation)</button><button id="emergency">Urgence SOS (simulation)</button><button class="red" id="cancelPower">Annuler</button></div>
-        <div class="toast" id="toast">OK</div><div class="home-indicator" id="homeIndicator"></div>
+        <div class="toast" id="toast">OK</div><button class="home-indicator" id="homeIndicator" aria-label="Retour à l’écran d’accueil" title="Accueil"></button>
       </div></div>
     </div>
   </section>
@@ -134,7 +145,33 @@ const wallSet=[
 ];
 let locked=false,currentApp=null,toastTimer,gameBoard=[],gameScore=0,snakeTimer=null,calcExpression='',timerInterval=null,timerEndsAt=Number(state.timerEndsAt)||0;
 function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1700)}
-function appIcon(id){const a=apps[id];let symbol=a.icon;if(id==='calendar')symbol='<span style="text-align:center;font-size:8px;line-height:1.2">JEU.<b style="display:block;font-size:20px">29</b></span>';if(id==='photos')symbol='<svg viewBox="0 0 32 32"><path stroke="#fa5b59" d="M16 16C8 15 8 7 13 6c3-1 5 4 3 10z"/><path stroke="#f7aa3e" d="M16 16c1-8 9-8 10-3 1 3-4 5-10 3z"/><path stroke="#62c96a" d="M16 16c8 1 8 9 3 10-3 1-5-4-3-10z"/><path stroke="#56a9f6" d="M16 16c-1 8-9 8-10 3-1-3 4-5 10-3z"/></svg>';return `<span class="app-icon icon-${a.cls}">${symbol}</span>`}
+const iconArtwork={
+ phone:'<path d="M8 5.5 5.9 7c-.8.6-1.1 1.6-.7 2.5a21 21 0 0 0 11.3 11.3c.9.4 1.9.1 2.5-.7l1.5-2.1-4.2-3-1.8 1.6a15 15 0 0 1-5.1-5.1L11 9.7 8 5.5Z"/>',
+ messages:'<path d="M16 5C9.9 5 5 9.1 5 14.2c0 2.6 1.3 4.9 3.5 6.5L8 25l5-2.1c1 .3 2 .5 3 .5 6.1 0 11-4.1 11-9.2S22.1 5 16 5Zm-5 10.4a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Zm5 0a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Zm5 0a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Z"/>',
+ safari:'<circle cx="16" cy="16" r="11"/><path d="m20.8 11.2-3.2 6.4-6.4 3.2 3.2-6.4 6.4-3.2Z"/><circle cx="16" cy="16" r="1"/>',
+ photos:'<g fill="none" stroke-width="2.7"><path stroke="#fa5b59" d="M16 16C8 15 8 7 13 6c3-1 5 4 3 10Z"/><path stroke="#f7aa3e" d="M16 16c1-8 9-8 10-3 1 3-4 5-10 3Z"/><path stroke="#62c96a" d="M16 16c8 1 8 9 3 10-3 1-5-4-3-10Z"/><path stroke="#56a9f6" d="M16 16c-1 8-9 8-10 3-1-3 4-5 10-3Z"/></g>',
+ camera:'<path d="M5 11h4l2-3h10l2 3h4v13H5V11Z"/><circle cx="16" cy="17" r="4.5"/>',
+ settings:'<circle cx="16" cy="16" r="4"/><path d="M13.5 4.8h5l.8 3a9 9 0 0 1 1.8 1l2.9-1 2.5 4.3-2.1 2.2a9 9 0 0 1 0 2.1l2.1 2.2-2.5 4.3-2.9-1a9 9 0 0 1-1.8 1l-.8 3h-5l-.8-3a9 9 0 0 1-1.8-1l-2.9 1-2.5-4.3 2.1-2.2a9 9 0 0 1 0-2.1L5.5 12l2.5-4.3 2.9 1a9 9 0 0 1 1.8-1l.8-2.9Z"/>',
+ calendar:'<rect x="5" y="7" width="22" height="20" rx="4"/><path d="M5 12h22M11 4v6m10-6v6"/><text x="16" y="23" text-anchor="middle" fill="currentColor" stroke="none" font-size="10" font-weight="700">29</text>',
+ weather:'<circle cx="11" cy="11" r="4"/><path d="M11 3v2m0 12v2M3 11h2m12 0h2M5.3 5.3l1.4 1.4m8.6 8.6 1.4 1.4m0-11.4-1.4 1.4m-8.6 8.6-1.4 1.4M11 24h13a4 4 0 0 0 .4-8 7 7 0 0 0-13.2 1.5A3.3 3.3 0 0 0 11 24Z"/>',
+ notes:'<path d="M8 5h16v22H8zM12 12h8m-8 4h8m-8 4h5"/><path d="M5 8v19h16"/>',
+ music:'<path d="M20 5v15.5a4 4 0 1 1-2-3.5V9l-8 2v12.5a4 4 0 1 1-2-3.5V8l12-3Z"/>',
+ clock:'<circle cx="16" cy="16" r="11"/><path d="M16 9v7l5 3"/>',
+ maps:'<path d="m4 8 7-4 10 4 7-4v20l-7 4-10-4-7 4V8Z"/><path d="M11 4v20m10-16v20"/><path d="M16 10a3 3 0 0 1 6 0c0 3-3 6-3 6s-3-3-3-6Z"/>',
+ store:'<path d="m6 25 8.2-17h3.6L26 25M10 18h12M13 25l3-6 3 6"/>',
+ health:'<path d="M16 27S4 20 4 11.7C4 5.5 12 4 16 10c4-6 12-4.5 12 1.7C28 20 16 27 16 27Z"/>',
+ calculator:'<rect x="6" y="4" width="20" height="24" rx="4"/><path d="M10 9h12M11 15h.1m5-.1h.1m5 0h.1M11 21h.1m5-.1h.1m5 0h.1"/>',
+ files:'<path d="M4 10a3 3 0 0 1 3-3h6l3 3h9a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10Z"/><path d="M4 14h24"/>',
+ mail:'<rect x="4" y="7" width="24" height="18" rx="4"/><path d="m5 10 11 8 11-8"/>',
+ wallet:'<rect x="5" y="7" width="22" height="19" rx="4"/><path d="M5 12h22m-6 6h3"/><path d="M8 7V5h15"/>',
+ game2048:'<rect x="5" y="5" width="10" height="10" rx="2"/><rect x="17" y="5" width="10" height="10" rx="2"/><rect x="5" y="17" width="10" height="10" rx="2"/><rect x="17" y="17" width="10" height="10" rx="2"/><path d="M8 10h4m-2-2v4m9 8h4"/>',
+ snake:'<path d="M6 22c0-4 5-4 5-8s-5-4-5-8m5 8h5c4 0 4 6 0 6h-2"/><circle cx="23" cy="20" r="4"/><circle cx="24" cy="19" r=".5" fill="currentColor"/>',
+ code:'<path d="m11 9-7 7 7 7m10-14 7 7-7 7m-3-18-4 24"/>',
+ paint:'<rect x="5" y="5" width="9" height="9" rx="1"/><rect x="18" y="5" width="9" height="9" rx="1"/><rect x="5" y="18" width="9" height="9" rx="1"/><rect x="18" y="18" width="9" height="9" rx="1"/>',
+ timer:'<circle cx="16" cy="17" r="10"/><path d="M13 3h6m-3 4V3m0 14 5-3"/>',
+ unit:'<path d="M5 10h19m-5-5 5 5-5 5M27 22H8m5-5-5 5 5 5"/>'
+};
+function appIcon(id){const a=apps[id];return `<span class="app-icon icon-${a.cls}"><svg viewBox="0 0 32 32" aria-hidden="true">${iconArtwork[id]||iconArtwork.store}</svg></span>`}
 function renderApps(){
  const grid=$('#appGrid'),dock=$('#dock');grid.innerHTML='';dock.innerHTML='';
  state.installed.forEach(id=>{if(!apps[id]||state.hidden.includes(id)||state.dock.includes(id))return;const b=document.createElement('button');b.className='app';b.dataset.app=id;b.innerHTML=appIcon(id)+`<span class="app-label">${apps[id].name}</span>`;b.onclick=()=>openApp(id);grid.appendChild(b)});
@@ -164,8 +201,8 @@ function settingsMarkup(){return `<div class="search">⌕ Rechercher dans Régla
 <div class="row"><span class="symbol" style="background:#777e8c">◫</span><div class="rowtext">Écran d’accueil et apps<small>Masquer, réorganiser, désinstaller</small></div><button class="store-action" id="manageApps">Gérer</button></div>
 <div class="row"><span class="symbol" style="background:#687a91">ⓘ</span><div class="rowtext">Informations<small>Concept iPhone 18 · iOS 27 simulé</small></div></div></div>
 <div style="font-size:11px;color:#888;text-align:center">Maquette web non officielle · iOS 27 simulé</div>`}
-function storeMarkup(){return `<div class="store-banner"><h3>Apps & jeux</h3><p>Installe des mini-applications locales. Elles apparaissent sur l’écran d’accueil et peuvent ensuite être masquées ou désinstallées.</p></div><div class="search">⌕ Rechercher une application</div><div class="store-list">${storeCatalog.map(id=>{const a=apps[id],installed=state.installed.includes(id);return `<div class="store-item"><div class="store-icon icon-${a.cls}">${a.icon}</div><div class="store-copy"><b>${a.name}</b><small>${a.thirdParty?'Mini-app interactive':'Application intégrée'}</small></div><button class="store-action ${installed?'installed':''}" data-install="${id}">${installed?'Ouvrir':'OBTENIR'}</button></div>`}).join('')}</div>`}
-function manageMarkup(){return `<p style="font-size:12px;color:#777">Masque une icône sans supprimer l’application, ou désinstalle-la. Les applications système essentielles ne peuvent pas toutes être supprimées.</p><div class="store-list">${state.installed.map(id=>`<div class="store-item"><div class="store-icon icon-${apps[id].cls}">${apps[id].icon}</div><div class="store-copy"><b>${apps[id].name}</b><small>${state.hidden.includes(id)?'Masquée':'Installée'}</small></div><button class="store-action" data-hide="${id}">${state.hidden.includes(id)?'Afficher':'Masquer'}</button>${apps[id].thirdParty?`<button class="store-action" data-uninstall="${id}">Suppr.</button>`:''}</div>`).join('')}</div>`}
+function storeMarkup(){return `<div class="store-banner"><h3>Apps & jeux</h3><p>Installe des mini-applications locales. Elles apparaissent sur l’écran d’accueil et peuvent ensuite être masquées ou désinstallées.</p></div><div class="search">⌕ Rechercher une application</div><div class="store-list">${storeCatalog.map(id=>{const a=apps[id],installed=state.installed.includes(id);return `<div class="store-item">${appIcon(id)}<div class="store-copy"><b>${a.name}</b><small>${a.thirdParty?'Mini-app interactive':'Application intégrée'}</small></div><button class="store-action ${installed?'installed':''}" data-install="${id}">${installed?'Ouvrir':'OBTENIR'}</button></div>`}).join('')}</div>`}
+function manageMarkup(){return `<p style="font-size:12px;color:#777">Masque une icône sans supprimer l’application, ou désinstalle-la. Les applications système essentielles ne peuvent pas toutes être supprimées.</p><div class="store-list">${state.installed.map(id=>`<div class="store-item">${appIcon(id)}<div class="store-copy"><b>${apps[id].name}</b><small>${state.hidden.includes(id)?'Masquée':'Installée'}</small></div><button class="store-action" data-hide="${id}">${state.hidden.includes(id)?'Afficher':'Masquer'}</button>${apps[id].thirdParty?`<button class="store-action" data-uninstall="${id}">Suppr.</button>`:''}</div>`).join('')}</div>`}
 function appMarkup(id){
  if(id==='settings')return settingsMarkup();
  if(id==='store')return storeMarkup();
@@ -260,16 +297,17 @@ document.addEventListener('keydown',e=>{if(currentApp==='game2048'&&['ArrowLeft'
 onClick('#frontBtn',showFront);onClick('#lockBtn',lockPhone);onClick('#ccBtn',showCC);onClick('#openCCButton',showCC);onClick('#closeCC',()=>{ const cc=$('#ccView'); if(cc) cc.style.display='none'; });
 onClick('#powerBtn',()=>{ const power=$('#powerView'); if(power) { power.style.display='flex';} closePanels(); const power2=$('#powerView'); if(power2) power2.style.display='flex';});
 onClick('#cancelPower',()=>{ const power=$('#powerView'); if(power) power.style.display='none'; });onClick('#powerOff',()=>{lockPhone();toast('Extinction simulée')});onClick('#emergency',()=>toast('Simulation uniquement : aucun appel effectué'));
-onClick('#backBtn',()=>{closePanels();const home=$('#homeView'); if(home) home.style.display='block'});onClick('#closeAppBtn',()=>{closePanels();const home=$('#homeView'); if(home) home.style.display='block'});
+onClick('#backBtn',()=>{closePanels();const home=$('#homeView'); if(home) home.style.display='block'});onClick('#closeAppBtn',()=>{closePanels();const home=$('#homeView'); if(home) home.style.display='block'});onClick('#homeIndicator',()=>{if(locked)return;closePanels();const home=$('#homeView');if(home)home.style.display='block'});
 const island=$('#island'); if(island) island.onclick=()=>island.classList.toggle('open');
 const torchBtn=$('#torchBtn'); if(torchBtn) torchBtn.onclick=()=>{state.torch=!state.torch;save();torchBtn.style.background=state.torch?'#ffe9a8':'#20232ba8';toast(state.torch?'Lampe torche simulée activée':'Lampe torche désactivée')};
 const lockCamera=$('#lockCamera'); if(lockCamera) lockCamera.onclick=()=>{unlockPhone();if(!locked)openApp('camera')};
 $$('[data-cc]').forEach(b=>b.onclick=()=>{const k=b.dataset.cc;if(k in state){state[k]=!state[k];if(k==='airplane'&&state.airplane){state.wifi=false;state.bluetooth=false}}else if(k==='torch'){state.torch=!state.torch}save();syncToggles();toast('Option modifiée')});
 const brightnessBtn=$('#brightness'); if(brightnessBtn) brightnessBtn.onclick=()=>{state.brightness=state.brightness>=120?50:state.brightness+20;const screen=$('#screen'); if(screen) screen.style.filter=`brightness(${state.brightness/100})`;save();toast('Luminosité : '+state.brightness+'%')};
 const volumeBtn=$('#volume'); if(volumeBtn) volumeBtn.onclick=()=>{state.volume=state.volume>=90?20:state.volume+20;save();toast('Volume : '+state.volume+'%')};
-const screen=$('#screen'); if(screen){ screen.addEventListener('touchstart',e=>{window.startY=e.touches[0].clientY;window.startX=e.touches[0].clientX},{passive:true}); screen.addEventListener('touchend',e=>{const endY=e.changedTouches[0].clientY;const delta=window.startY-endY;if(locked&&delta>45)unlockPhone();else if(!locked&&endY-window.startY>45&&window.startY<150&&window.startX>screen.clientWidth*.7)showCC()},{passive:true}); screen.addEventListener('click',e=>{if(locked&&!e.target.closest('button')&&!e.target.closest('.island'))unlockPhone()}); }
+const screen=$('#screen'); if(screen){ screen.addEventListener('touchstart',e=>{window.startY=e.touches[0].clientY;window.startX=e.touches[0].clientX},{passive:true}); screen.addEventListener('touchend',e=>{const startY=window.startY,endY=e.changedTouches[0].clientY,delta=startY-endY;if(locked&&delta>45)unlockPhone();else if(!locked&&delta< -45&&startY<150&&window.startX>screen.clientWidth*.7)showCC();else if(!locked&&delta>45&&startY>screen.clientHeight*.82){closePanels();const home=$('#homeView');if(home)home.style.display='block'}},{passive:true}); screen.addEventListener('click',e=>{if(locked&&!e.target.closest('button')&&!e.target.closest('.island'))unlockPhone()}); }
 function updateTime(){const d=new Date(),hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0');const statusTime=$('#statusTime'); if(statusTime) statusTime.textContent=hh+':'+mm; const lockTime=$('#lockTime'); if(lockTime) lockTime.textContent=hh+':'+mm;const date=new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long'}).format(d);const lockDate=$('#lockDate'); if(lockDate) lockDate.textContent=date[0].toUpperCase()+date.slice(1);const homeDate=$('#homeDate'); if(homeDate) homeDate.textContent=date.toLocaleUpperCase('fr-FR');const clockFace=$('#clockFace');if(clockFace)clockFace.textContent=d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
 const home=$('#homeView'); const lock=$('#lockView'); if(home) home.style.display='block'; if(lock) lock.style.display='none';
-renderApps();updateWall();updateTime();setInterval(updateTime,1000);resumeTimer();syncToggles();
+function updateHomeWidgets(){const now=new Date(),day=$('#homeDay'),month=$('#homeMonth');if(day)day.textContent=now.getDate();if(month)month.textContent=new Intl.DateTimeFormat('fr-FR',{month:'long'}).format(now).toLocaleUpperCase('fr-FR')}
+renderApps();updateWall();updateTime();updateHomeWidgets();setInterval(updateTime,1000);setInterval(updateHomeWidgets,60000);resumeTimer();syncToggles();
 </script>
 </body></html>
