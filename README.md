@@ -1,2 +1,2 @@
 # Gabriel59200.github.io
-iphone 18
+Site statique de démonstration iPhone simulé.
