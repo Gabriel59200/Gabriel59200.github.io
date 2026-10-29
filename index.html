@@ -6,9 +6,9 @@
 <style>
 :root{--accent:#44a7ff;--wall1:#0b1020;--wall2:#6a5bd3;--wall3:#f5bfd8;--glass:rgba(255,255,255,.14);--fg:#f5f7ff;--body:#070910;--edge1:#dfe5ec;--edge2:#1c2128;--edge3:#0d1118;--tint:#7bc0ff}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:#f7f7fa}
-body{background:radial-gradient(circle at 18% 15%,rgba(105,132,255,.34),transparent 18%),radial-gradient(circle at 82% 78%,rgba(81,200,255,.16),transparent 25%),linear-gradient(140deg,#04070d,#0e1222 38%,#070b12)}
+body{background:radial-gradient(circle at 50% 20%,rgba(98,145,255,.25),transparent 26%),radial-gradient(circle at 80% 80%,rgba(122,191,255,.12),transparent 22%),linear-gradient(140deg,#02050a,#0a0f18 38%,#02060d)}
 button,input,textarea,select{font:inherit}button{cursor:pointer}
-.page{max-width:none;min-height:100vh;display:grid;place-items:center;padding:0}
+.page{max-width:none;min-height:100vh;display:grid;place-items:center;padding:0;background:radial-gradient(circle at center,#03070e 0%,#02050b 48%,#010306 100%)}
 .top{display:none}.tag{display:none}.layout{display:block}.section:first-child{display:none}.hint-line{display:none}
 h1{font-size:clamp(44px,5vw,72px);line-height:.94;letter-spacing:-.075em;margin:0 0 18px;font-weight:700}
 h1 span{color:#a4b7d9}.copy{color:#c1c7d8;line-height:1.7;max-width:580px;font-size:15px}
@@ -17,18 +17,18 @@ h1 span{color:#a4b7d9}.copy{color:#c1c7d8;line-height:1.7;max-width:580px;font-s
 .outbtn{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:#fff;padding:11px 14px;border-radius:12px;font-size:12px;letter-spacing:.02em;transition:all .2s ease}.outbtn:hover{background:#fff;color:#111;transform:translateY(-1px)}
 .device-stage{min-height:790px;display:grid;place-items:center;position:relative;perspective:1500px}
 .glow{position:absolute;width:430px;height:630px;border-radius:50%;background:radial-gradient(ellipse,#b3d2ff42 0%,transparent 62%);filter:blur(10px)}
-.device{width:370px;height:760px;position:relative;transform:rotateY(-8deg) rotateX(2deg);transition:transform .35s ease}.device:before,.device:after{content:"";position:absolute;top:110px;width:6px;height:112px;border-radius:999px;background:linear-gradient(180deg,#dfe8f0,#7a7f88 18%,#11161d 58%,#dfe8f0);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}.device:before{left:-6px}.device:after{right:-6px;top:168px;height:146px}
-.frame{position:absolute;inset:0;border-radius:58px;padding:8px;background:linear-gradient(135deg,#edf2f6 0%,#b5bec8 12%,#515864 22%,#0b0d11 32%,#8d97a2 42%,#1b1f27 56%,#c7ccd2 71%,#11151b 84%,#dfe5ec 100%);box-shadow:0 40px 90px rgba(0,0,0,.52),0 2px 0 rgba(255,255,255,.45) inset,inset 0 0 0 1px rgba(255,255,255,.4)}
+.device{width:420px;height:840px;position:relative;transform:rotateY(-10deg) rotateX(4deg) scale(1.02);transition:transform .35s ease}.device:before,.device:after{content:"";position:absolute;top:120px;width:7px;height:128px;border-radius:999px;background:linear-gradient(180deg,#e5edf8,#8f97a4 18%,#0e1218 58%,#dfeaf6);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}.device:before{left:-7px}.device:after{right:-7px;top:184px;height:160px}
+.frame{position:absolute;inset:0;border-radius:62px;padding:10px;background:linear-gradient(135deg,#edf2f6 0%,#b8bfc9 10%,#3f4751 22%,#0b0d11 32%,#7f8996 42%,#1a1f28 56%,#bfc9d2 71%,#141a22 84%,#e4ebf4 100%);box-shadow:0 45px 100px rgba(0,0,0,.58),0 2px 0 rgba(255,255,255,.52) inset,inset 0 0 0 1px rgba(255,255,255,.32)}
 .frame:after{content:"";position:absolute;inset:10px;border:1px solid rgba(255,255,255,.38);border-radius:50px;pointer-events:none}
-.screen{position:relative;height:100%;border-radius:50px;overflow:hidden;background:#0e1116;isolation:isolate;box-shadow:inset 0 0 18px rgba(255,255,255,.08)}
-.wallpaper{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 72% 24%,var(--wall3),transparent 32%),linear-gradient(140deg,var(--wall1),var(--wall2) 52%,#101725)}
+.screen{position:relative;height:100%;border-radius:52px;overflow:hidden;background:#0e1116;isolation:isolate;box-shadow:inset 0 0 22px rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.08)}
+.wallpaper{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 72% 24%,var(--wall3),transparent 30%),linear-gradient(140deg,var(--wall1),var(--wall2) 52%,#101725)}
 .wallpaper:before{content:"";position:absolute;left:-26%;top:18%;width:152%;height:58%;border-radius:44%;background:linear-gradient(110deg,transparent,#e5d1fa 26%,#83a7ff 55%,transparent 78%);filter:blur(22px);transform:rotate(-22deg)}
 .wallpaper:after{content:"";position:absolute;right:-28%;bottom:-10%;width:120%;height:46%;border-radius:45%;background:linear-gradient(120deg,rgba(244,210,227,.9),rgba(87,127,201,.72),transparent 76%);filter:blur(18px);transform:rotate(-14deg)}
 .status{position:absolute;z-index:20;top:16px;left:28px;right:28px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.5)}
 .status-right{display:flex;gap:5px;align-items:center}.bars{display:flex;gap:2px;align-items:flex-end;height:11px}.bars i{width:3px;background:#fff;border-radius:2px}.bars i:nth-child(1){height:4px}.bars i:nth-child(2){height:6px}.bars i:nth-child(3){height:8px}.bars i:nth-child(4){height:10px}
 .wifi{font-size:11px}.battery{width:20px;height:10px;border:1px solid #fff;border-radius:3px;padding:1px;position:relative}.battery:before{content:"";display:block;width:78%;height:100%;background:#fff;border-radius:1px}.battery:after{content:"";position:absolute;right:-3px;top:2px;height:4px;width:2px;background:#fff}
-.island{position:absolute;z-index:25;left:50%;top:10px;transform:translateX(-50%);height:28px;width:112px;background:#020306;border-radius:999px;transition:all .25s ease;cursor:pointer;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 5px 20px rgba(0,0,0,.3)}
-.island.open{width:236px;height:60px}.island-content{display:none;align-items:center;padding:10px 12px;gap:10px;height:100%;font-size:10px}.island.open .island-content{display:flex}.album{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#f1d1ff,#8da6e5);display:grid;place-items:center;color:#25213a;font-size:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.island{position:absolute;z-index:25;left:50%;top:12px;transform:translateX(-50%);height:30px;width:124px;background:#020306;border-radius:999px;transition:all .25s ease;cursor:pointer;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 8px 20px rgba(0,0,0,.28)}
+.island.open{width:250px;height:64px}.island-content{display:none;align-items:center;padding:10px 12px;gap:10px;height:100%;font-size:10px}.island.open .island-content{display:flex}.album{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#f1d1ff,#8da6e5);display:grid;place-items:center;color:#25213a;font-size:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
 .track{flex:1}.track b{display:block;font-size:11px}.track span{color:#a9adb7}
 .view{position:absolute;inset:0;z-index:5;color:white}.lock{display:flex;align-items:center;flex-direction:column;text-align:center;padding-top:92px}.date{font-size:15px;color:#fff9}.time{font-size:84px;line-height:1.08;font-weight:250;letter-spacing:-.07em;font-variant-numeric:tabular-nums;text-shadow:0 3px 20px rgba(0,0,0,.18)}
 .lock-widgets{display:flex;gap:8px;margin-top:20px}.widget{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px);border-radius:18px;width:104px;padding:10px 9px;text-align:left;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}.widget small{display:block;font-size:9px;color:#f5f5fb;letter-spacing:.12em}.widget strong{font-size:13px;display:block;margin-top:5px}
@@ -106,7 +106,7 @@ const storeCatalog=['game2048','snake','code','paint','timer','unit','mail','wal
 const wallSet=[
 ['#0a1026','#6a5ba6','#f3b8d0'],['#071c2d','#168d9b','#d2f6e9'],['#170c24','#8b3f73','#f2a7a0'],['#0a1017','#435e7b','#e2e8f5'],['#21112a','#ad6c9e','#ffd4d8']
 ];
-let locked=true,currentApp=null,toastTimer,gameBoard=[],gameScore=0,snakeTimer=null,calcExpression='';
+let locked=false,currentApp=null,toastTimer,gameBoard=[],gameScore=0,snakeTimer=null,calcExpression='';
 function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1700)}
 function appIcon(id){const a=apps[id];let symbol=a.icon;if(id==='calendar')symbol='<span style="text-align:center;font-size:8px;line-height:1.2">JEU.<b style="display:block;font-size:20px">29</b></span>';if(id==='photos')symbol='<svg viewBox="0 0 32 32"><path stroke="#fa5b59" d="M16 16C8 15 8 7 13 6c3-1 5 4 3 10z"/><path stroke="#f7aa3e" d="M16 16c1-8 9-8 10-3 1 3-4 5-10 3z"/><path stroke="#62c96a" d="M16 16c8 1 8 9 3 10-3 1-5-4-3-10z"/><path stroke="#56a9f6" d="M16 16c-1 8-9 8-10 3-1-3 4-5 10-3z"/></svg>';return `<span class="app-icon icon-${a.cls}">${symbol}</span>`}
 function renderApps(){
@@ -224,6 +224,7 @@ const brightnessBtn=$('#brightness'); if(brightnessBtn) brightnessBtn.onclick=()
 const volumeBtn=$('#volume'); if(volumeBtn) volumeBtn.onclick=()=>{state.volume=state.volume>=90?20:state.volume+20;save();toast('Volume : '+state.volume+'%')};
 const screen=$('#screen'); if(screen){ screen.addEventListener('touchstart',e=>{window.startY=e.touches[0].clientY},{passive:true}); screen.addEventListener('touchend',e=>{const delta=window.startY-e.changedTouches[0].clientY;if(delta>45&&locked)unlockPhone();else if(delta>45&&!locked&&window.startY<150)showCC()},{passive:true}); screen.addEventListener('click',e=>{if(locked&&!e.target.closest('button')&&!e.target.closest('.island'))unlockPhone()}); }
 function updateTime(){const d=new Date(),hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0');const statusTime=$('#statusTime'); if(statusTime) statusTime.textContent=hh+':'+mm; const lockTime=$('#lockTime'); if(lockTime) lockTime.textContent=hh+':'+mm;const date=new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long'}).format(d);const lockDate=$('#lockDate'); if(lockDate) lockDate.textContent=date[0].toUpperCase()+date.slice(1);const homeDate=$('#homeDate'); if(homeDate) homeDate.textContent=date.toLocaleUpperCase('fr-FR')}
+const home=$('#homeView'); const lock=$('#lockView'); if(home) home.style.display='block'; if(lock) lock.style.display='none';
 renderApps();updateWall();updateTime();setInterval(updateTime,10000);syncToggles();
 </script>
 </body></html>
